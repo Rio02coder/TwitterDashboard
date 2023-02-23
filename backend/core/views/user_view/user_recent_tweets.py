@@ -28,7 +28,7 @@ class RecentTweetsView(APIView):
 
         else:
             user = self.get_user(request.user)
-            user.update_recent_tweets()
+            User.objects.update_recent_tweets(user)
             user_serializer = self.get_user_serializer(request.user, recent_tweets_field)
 
         return JsonResponse(user_serializer.data, status=HTTPStatus.OK.value)
