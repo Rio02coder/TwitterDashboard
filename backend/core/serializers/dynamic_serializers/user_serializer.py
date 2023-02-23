@@ -2,9 +2,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import make_password
 
 from core.models.user_model import User
-from core.serializers.model_serializers import DynamicFieldsModelSerializer
+from core.serializers.model_serializers import DynamicFieldsModelSerializer, TweetSerializer
 from core.helpers.customs.custom_exceptions import InvalidSerializerMethodError
-
 
 class UserSerializer(DynamicFieldsModelSerializer):
     """
@@ -12,6 +11,8 @@ class UserSerializer(DynamicFieldsModelSerializer):
         Should be used for returning User data and creating new User objects.
         To only return particular fields of the User data, pass the Serializer a fields parameter as a list of field names.
     """
+
+    recent_tweets = TweetSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
@@ -24,9 +25,10 @@ class UserSerializer(DynamicFieldsModelSerializer):
             'is_verified',
             'is_active',
             'is_staff',
-            'password'
+            'password',
+            'recent_tweets'
         ]
-        read_only_fields = ('id', 'is_verified', 'is_active', 'is_staff', 'date_joined')
+        read_only_fields = ('id', 'is_verified', 'is_active', 'is_staff', 'date_joined', 'recent_tweets')
         extra_kwargs = {
             'password': {'required': True, 'write_only': True},
         }

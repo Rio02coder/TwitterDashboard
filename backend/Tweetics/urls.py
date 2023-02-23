@@ -20,4 +20,7 @@ from core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/signup/', views.SignUpView.as_view(), name="sign_up"),
+    path('user/token/refresh', views.RefreshTokenView.as_view(), name="refresh_token"),
+    path('user/tweets/<str:force_update>', views.RecentTweetsView.as_view(), name="recent_tweets"),
+    path('demo/', views.DemoView.as_view(), name="demo_view")
 ]
