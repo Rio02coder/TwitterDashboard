@@ -89,10 +89,10 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 6,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -100,8 +100,50 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    {
+        'NAME': 'core.helpers.password_validators.number_validator.NumberValidator',
+        'OPTIONS': {
+            'min_digits': 1,
+        }
+    },
+    {
+        'NAME': 'core.helpers.password_validators.upper_case_validator.UpperCaseValidator',
+        'OPTIONS': {
+            'min_digits': 1,
+        }
+    },
+    {
+        'NAME': 'core.helpers.password_validators.lower_case_validator.LowerCaseValidator',
+        'OPTIONS': {
+            'min_digits': 1,
+        }
+    },
+    {
+        'NAME': 'core.helpers.password_validators.symbol_validator.SymbolValidator',
+        'OPTIONS': {
+            'min_digits': 1,
+        }
+    }
 ]
 
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+]
+
+CACHE_TTL = 60 * 1500
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "example"
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/

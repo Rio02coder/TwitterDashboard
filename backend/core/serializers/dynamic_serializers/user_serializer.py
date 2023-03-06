@@ -13,7 +13,7 @@ class UserSerializer(DynamicFieldsModelSerializer):
     """
 
     recent_tweets = TweetSerializer(many=True, read_only=True)
-
+    last_month_tweets = TweetSerializer(many=True, read_only=True)
     class Meta:
         model = User
         fields = [
@@ -26,9 +26,11 @@ class UserSerializer(DynamicFieldsModelSerializer):
             'is_active',
             'is_staff',
             'password',
-            'recent_tweets'
+            'recent_tweets',
+            'last_month_tweets'
         ]
-        read_only_fields = ('id', 'is_verified', 'is_active', 'is_staff', 'date_joined', 'recent_tweets')
+        read_only_fields = ('id', 'is_verified', 'is_active', 'is_staff', 'date_joined', 'recent_tweets',
+                            'last_month_tweets')
         extra_kwargs = {
             'password': {'required': True, 'write_only': True},
         }
@@ -39,8 +41,13 @@ class UserSerializer(DynamicFieldsModelSerializer):
         return value
 
     def create(self, validated_data):
-        validated_data['password'] = make_password(validated_data['password'])
         return super(UserSerializer, self).create(validated_data)
+
+    def get_user_recent_tweets(self):
+        return self.fields.get('recent_tweets')
+
+    def get_user_last_month_tweets(self):
+        return self.fields.get('last_month_tweets')
 
     def update(self, instance, validated_data):
         raise InvalidSerializerMethodError(

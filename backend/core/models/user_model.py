@@ -6,6 +6,7 @@ from typing import Union
 from core.Twitter_api.Twitter_id import get_twitter_user_id
 from core.Twitter_api.Tweets import get_recent_tweets, get_last_month_tweets
 from core.models.tweet_model import Tweet
+from core.Twitter_api.Month_date_time import get_current_month_number
 
 
 class UserManager(BaseUserManager):
@@ -24,6 +25,7 @@ class UserManager(BaseUserManager):
         twitter_id = get_twitter_user_id(twitter_name)
         user = self.model(
             email=email, twitter_name=twitter_name, twitter_id=twitter_id, **extra_fields)
+        print(password)
         user.set_password(password)
         user.save(using=self.db)
         return user
@@ -41,6 +43,11 @@ class UserManager(BaseUserManager):
         for user_tweet in user_tweets:
             user.recent_tweets.add(user_tweet)
 
+    def add_last_month_tweets_to_user(self, fetched_tweets, user):
+        user_tweets = self.create_tweets_database(fetched_tweets)
+        for user_tweet in user_tweets:
+            user.last_month_tweets.add(user_tweet)
+
     def fetch_tweets(self, email):
         twitter_id = User.objects.filter(email=email)[0].twitter_id
         try:
@@ -48,11 +55,20 @@ class UserManager(BaseUserManager):
         except Exception as e:
             raise e
 
+    def fetch_last_month_tweets(self, twitter_id):
+        try:
+            return get_last_month_tweets(twitter_id)
+        except Exception as e:
+            raise e
+
     def create_user(self, email: str, password: Union[str, None], twitter_name: str, **extra_fields):
         """Create and save a regular user with the email, password and twitter name"""
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, twitter_name, **extra_fields)
+        user = self._create_user(email, password, twitter_name, **extra_fields)
+        self.add_recent_tweets(user)
+        self.add_last_month_tweets(user)
+        return user
 
     def create_superuser(self, email: str, password: str, twitter_name: str, **extra_fields):
         """Create and save a SuperUser with the given email, password and twitter name."""
@@ -74,10 +90,30 @@ class UserManager(BaseUserManager):
         user.recent_tweets.all().delete()
         self.add_recent_tweets(user)
 
+    def add_last_month_tweets(self, user):
+        current_month = get_current_month_number()
+        last_month_tweets = self.fetch_last_month_tweets(user.twitter_id)
+        self.add_last_month_tweets_to_user(last_month_tweets, user)
+        last_month = 12 if current_month == 1 else current_month - 1
+        user.last_fetched_month = last_month
+        user.save()
+
+    def update_last_month_tweets(self, user):
+        current_month = get_current_month_number()
+        last_fetched_month = user.last_fetched_month
+        if last_fetched_month == 0:
+            self.add_last_month_tweets(user)
+        elif last_fetched_month < current_month - 1:
+            user.last_month_tweets.all().delete()
+            self.add_last_month_tweets(user)
+        else:
+            return
+
     def create(self, email: str, password: Union[str, None], twitter_name: str, **extra_fields):
         user = self.create_user(email, password, twitter_name, **extra_fields)
         # Get recent tweets and add it to the user
         self.add_recent_tweets(user)
+        self.add_last_month_tweets(user)
         return user
 
 

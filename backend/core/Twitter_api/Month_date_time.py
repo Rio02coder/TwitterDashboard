@@ -22,7 +22,7 @@ def get_last_month_bounds(year, month):
         month_number = month_number - 1
     else:
         month_number = 12
-        year_number = int(year)
+        year_number = int(year - 1)
 
     return get_month_start_and_end(year_number, month_number)
 
