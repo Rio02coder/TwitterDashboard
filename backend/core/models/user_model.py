@@ -7,6 +7,7 @@ from core.Twitter_api.Twitter_id import get_twitter_user_id
 from core.Twitter_api.Tweets import get_recent_tweets, get_last_month_tweets
 from core.models.tweet_model import Tweet
 from core.Twitter_api.Month_date_time import get_current_month_number
+from core.models.prediction_model import Prediction
 
 
 class UserManager(BaseUserManager):
@@ -149,6 +150,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     recent_tweets = models.ManyToManyField(Tweet, related_name="_Recent_Tweets", blank=True)
     last_month_tweets = models.ManyToManyField(Tweet, related_name="_Last_Month_Tweets", blank=True)
     last_fetched_month = models.IntegerField(_('Last month to be fetched'), blank=False, default=0)
+    recent_prediction = models.OneToOneField(Prediction, on_delete=models.CASCADE, blank=True,
+                                             related_name="Recent prediction+", null=True)
+    last_month_prediction = models.OneToOneField(Prediction, on_delete=models.CASCADE, blank=True,
+                                                 related_name="Last month prediction+", null=True)
     is_verified: bool = models.BooleanField(default=False)
     is_active: bool = models.BooleanField(default=True)
     is_staff: bool = models.BooleanField(default=False)
@@ -162,3 +167,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self) -> str:
         """Return the full name of the user."""
         return f'{self.first_name} {self.last_name}'
+
+    def _get_re_computation_status(self, pk):
+        pass
+
+    def re_compute_recent_prediction(self):
+        """Returns whether the recent tweets prediction requires re computation."""
+        pk = self.recent_prediction.pk
+        recent_prediction = Prediction.objects.get(pk=pk)
+        return recent_prediction.requires_re_computation
+
+    def re_compute_last_month_prediction(self):
+        """Returns whether the recent tweets prediction requires re computation."""
+        pk = self.last_month_prediction.pk
+        last_month_prediction = Prediction.objects.get(pk=pk)
+        return last_month_prediction.requires_re_computation
