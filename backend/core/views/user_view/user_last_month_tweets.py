@@ -4,7 +4,7 @@ from core.models.user_model import User
 from core.serializers.dynamic_serializers import UserSerializer
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.core.cache import cache
+from core.cache import last_month_tweet_cache
 import datetime
 
 from http import HTTPStatus
@@ -38,10 +38,10 @@ class LastMonthTweetsView(APIView):
 
     def store_to_cache(self, data, user_email):
         cache_timeout = self.seconds_to_next_month()
-        cache.set(user_email + CACHE_STRING, data, timeout=cache_timeout)
+        last_month_tweet_cache.set_to_cache(user_email, data, timeout=cache_timeout)
 
     def get_from_cache(self, user_email):
-        return cache.get(user_email + CACHE_STRING)
+        return last_month_tweet_cache.get_from_cache(user_email)
 
     def get_data(self, user_email):
         cache_response = self.get_from_cache(user_email)

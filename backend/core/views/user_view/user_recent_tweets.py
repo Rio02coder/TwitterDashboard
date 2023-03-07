@@ -4,12 +4,12 @@ from core.models.user_model import User
 from core.serializers.dynamic_serializers import UserSerializer
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.core.cache import cache
+from core.cache import recent_tweet_cache
 
 from http import HTTPStatus
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
-CACHE_STRING = 'RECENT_TWEETS'
+# CACHE_STRING = 'RECENT_TWEETS'
 class RecentTweetsView(APIView):
 
     http_method_names = ['get']
@@ -21,10 +21,10 @@ class RecentTweetsView(APIView):
         return User.objects.filter(email=email)[0]
 
     def store_to_cache(self, data, user_email):
-        cache.set(user_email + CACHE_STRING, data, timeout=None)
+        recent_tweet_cache.set_to_cache(user_email, data, timeout=None)
 
     def get_from_cache(self, user_email):
-        return cache.get(user_email + CACHE_STRING)
+        return recent_tweet_cache.get_from_cache(user_email)
 
     def get_data(self, user_email):
         cache_response = self.get_from_cache(user_email)

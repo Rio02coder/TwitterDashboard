@@ -10,7 +10,7 @@ from core.Twitter_api.Month_date_time import get_current_month_number
 from core.models.prediction_model import Prediction
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-from django.core.cache import cache
+from core.cache import cache
 
 
 class UserManager(BaseUserManager):
@@ -93,6 +93,7 @@ class UserManager(BaseUserManager):
     def update_recent_tweets(self, user):
         user.recent_tweets.all().delete()
         self.add_recent_tweets(user)
+        user.update_recent_prediction_status(True)
 
     def add_last_month_tweets(self, user):
         current_month = get_current_month_number()
@@ -104,12 +105,14 @@ class UserManager(BaseUserManager):
 
     def update_last_month_tweets(self, user):
         current_month = get_current_month_number()
+        last_month = 12 if current_month == 1 else current_month - 1
         last_fetched_month = user.last_fetched_month
         if last_fetched_month == 0:
             self.add_last_month_tweets(user)
-        elif last_fetched_month < current_month - 1:
+        elif last_fetched_month < last_month:
             user.last_month_tweets.all().delete()
             self.add_last_month_tweets(user)
+            user.update_last_month_prediction_status(True)
         else:
             return
 
@@ -171,29 +174,70 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Return the full name of the user."""
         return f'{self.first_name} {self.last_name}'
 
+    def _get_last_month_prediction_object(self):
+        pk = self.last_month_prediction.pk
+        return Prediction.objects.get(pk=pk)
+
+    def _get_recent_prediction_object(self):
+        pk = self.recent_prediction.pk
+        return Prediction.objects.get(pk=pk)
+
     def _get_re_computation_status(self, pk):
         prediction_object = Prediction.objects.get(pk=pk)
         return prediction_object.requires_re_computation
 
+    def _report_missing_recent_prediction(self):
+        if not self.last_month_prediction:
+            raise AttributeError
+
+    def _report_missing_last_month_prediction(self):
+        if not self.recent_prediction:
+            raise AttributeError
+
     def re_compute_recent_prediction(self):
         """Returns whether the recent tweets prediction requires re computation.
         In the case that it does not exist, it returns None."""
-        if not self.last_month_prediction:
+        try:
+            self._report_missing_recent_prediction()
+            pk = self.recent_prediction.pk
+            return self._get_re_computation_status(pk)
+        except:
             return None
-        pk = self.recent_prediction.pk
-        return self._get_re_computation_status(pk)
 
     def re_compute_last_month_prediction(self):
         """Returns whether the recent tweets prediction requires re computation.
         In the case that it does not exist, it returns None."""
-        if not self.last_month_prediction:
+        try:
+            self._report_missing_last_month_prediction()
+            pk = self.last_month_prediction.pk
+            return self._get_re_computation_status(pk)
+        except:
             return None
-        pk = self.last_month_prediction.pk
-        return self._get_re_computation_status(pk)
+
+    def update_last_month_prediction_status(self, status):
+        try:
+            self._report_missing_last_month_prediction()
+            last_month_prediction = self._get_last_month_prediction_object()
+            last_month_prediction.requires_re_computation = status
+            last_month_prediction.save()
+            return True
+        except:
+            return False
+
+    def update_recent_prediction_status(self, status):
+        try:
+            self._report_missing_recent_prediction()
+            recent_prediction = self._get_recent_prediction_object()
+            recent_prediction.requires_re_computation = status
+            recent_prediction.save()
+            return True
+        except:
+            return False
+
 
 # Signals
 
 
 @receiver(post_delete, sender=User)
 def delete_user_cache(sender, instance, using, **kwargs):
-    cache.delete_pattern(instance.email + "*")
+    cache.delete_cache_patterns(instance.email)
