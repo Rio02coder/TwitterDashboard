@@ -8,6 +8,9 @@ from core.Twitter_api.Tweets import get_recent_tweets, get_last_month_tweets
 from core.models.tweet_model import Tweet
 from core.Twitter_api.Month_date_time import get_current_month_number
 from core.models.prediction_model import Prediction
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
+from django.core.cache import cache
 
 
 class UserManager(BaseUserManager):
@@ -169,16 +172,28 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f'{self.first_name} {self.last_name}'
 
     def _get_re_computation_status(self, pk):
-        pass
+        prediction_object = Prediction.objects.get(pk=pk)
+        return prediction_object.requires_re_computation
 
     def re_compute_recent_prediction(self):
-        """Returns whether the recent tweets prediction requires re computation."""
+        """Returns whether the recent tweets prediction requires re computation.
+        In the case that it does not exist, it returns None."""
+        if not self.last_month_prediction:
+            return None
         pk = self.recent_prediction.pk
-        recent_prediction = Prediction.objects.get(pk=pk)
-        return recent_prediction.requires_re_computation
+        return self._get_re_computation_status(pk)
 
     def re_compute_last_month_prediction(self):
-        """Returns whether the recent tweets prediction requires re computation."""
+        """Returns whether the recent tweets prediction requires re computation.
+        In the case that it does not exist, it returns None."""
+        if not self.last_month_prediction:
+            return None
         pk = self.last_month_prediction.pk
-        last_month_prediction = Prediction.objects.get(pk=pk)
-        return last_month_prediction.requires_re_computation
+        return self._get_re_computation_status(pk)
+
+# Signals
+
+
+@receiver(post_delete, sender=User)
+def delete_user_cache(sender, instance, using, **kwargs):
+    cache.delete_pattern(instance.email + "*")
