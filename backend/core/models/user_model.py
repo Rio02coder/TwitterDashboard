@@ -43,7 +43,6 @@ class UserManager(BaseUserManager):
 
     def add_tweets_to_user(self, fetched_tweets, user):
         user_tweets = self.create_tweets_database(fetched_tweets)
-
         for user_tweet in user_tweets:
             user.recent_tweets.add(user_tweet)
 
@@ -114,13 +113,14 @@ class UserManager(BaseUserManager):
             self.add_last_month_tweets(user)
             user.update_last_month_prediction_status(True)
         else:
+            print("Fetching is not required")
             return
 
     def create(self, email: str, password: Union[str, None], twitter_name: str, **extra_fields):
         user = self.create_user(email, password, twitter_name, **extra_fields)
         # Get recent tweets and add it to the user
-        self.add_recent_tweets(user)
-        self.add_last_month_tweets(user)
+        # self.add_recent_tweets(user)
+        # self.add_last_month_tweets(user)
         return user
 
 
@@ -234,6 +234,52 @@ class User(AbstractBaseUser, PermissionsMixin):
         except:
             return False
 
+    def _check_recent_prediction(self):
+        try:
+            print("In recent pred")
+            self._report_missing_recent_prediction()
+            if self.re_compute_recent_prediction():
+                print("Recent re compute")
+                raise ValueError
+        except Exception as e:
+            raise e
+
+    def _check_last_month_prediction(self):
+        try:
+            print("In last month pred")
+            self._report_missing_last_month_prediction()
+            if self.re_compute_last_month_prediction():
+                print("Last month re compute")
+                raise ValueError
+        except Exception as e:
+            raise e
+
+    def get_recent_prediction(self):
+        """This method returns the prediction of the recent tweets.
+        This assumes that the recent tweets are updated."""
+        try:
+            self._check_recent_prediction()
+            recent_prediction = self._get_recent_prediction_object()
+            return recent_prediction.prediction
+        except AttributeError:
+            print("Creating Prediction recent")
+            return 1
+        except ValueError:
+            print("Recomputing lm")
+
+    def get_last_month_prediction(self):
+        """This method returns the last month prediction. This will assume
+        that the last month tweets are updated."""
+        try:
+            self._check_last_month_prediction()
+            last_month_prediction = self._get_last_month_prediction_object()
+            return last_month_prediction.prediction
+        except AttributeError:
+            print("Creating prediction lm")
+            return 1
+        except ValueError:
+            print("Recomputing lm")
+            return 1
 
 # Signals
 

@@ -24,6 +24,7 @@ urlpatterns = [
     path('user/tweets/<str:force_update>/', views.RecentTweetsView.as_view(), name="recent_tweets"),
     path('user/tweets_last_month/', views.LastMonthTweetsView.as_view(), name="last_month_tweets"),
     path('user/login/', views.UserAuthTokenView.as_view(), name="user_login"),
+    path('user/prediction/', views.UserFluPrediction.as_view(), name="user_flu_prediction"),
     path('user/logout/', views.LogOutView.as_view(), name="user_logout"),
     path('demo/', views.DemoView.as_view(), name="demo_view")
 ]
