@@ -11,6 +11,8 @@ from core.models.prediction_model import Prediction
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from core.cache import cache
+from core.cache.singleton_caches import user_last_month_flu_prediction_cache, user_recent_flu_prediction_cache
+from core.flu_prediction.prediction import FluPrediction
 
 
 class UserManager(BaseUserManager):
@@ -93,6 +95,7 @@ class UserManager(BaseUserManager):
         user.recent_tweets.all().delete()
         self.add_recent_tweets(user)
         user.update_recent_prediction_status(True)
+        user_recent_flu_prediction_cache.delete_from_cache(user.email)
 
     def add_last_month_tweets(self, user):
         current_month = get_current_month_number()
@@ -112,6 +115,7 @@ class UserManager(BaseUserManager):
             user.last_month_tweets.all().delete()
             self.add_last_month_tweets(user)
             user.update_last_month_prediction_status(True)
+            user_last_month_flu_prediction_cache.delete_from_cache(user.email)
         else:
             print("Fetching is not required")
             return
@@ -150,12 +154,18 @@ class User(AbstractBaseUser, PermissionsMixin):
             )
         ],
     )
-    email: str = models.EmailField(_('Email address'), blank=False, unique=True)
-    twitter_id = models.BigIntegerField(_('Twitter id'), blank=False, unique=True)
-    twitter_name = models.CharField(_('Twitter username'), max_length=1000, blank=False, unique=True)
-    recent_tweets = models.ManyToManyField(Tweet, related_name="_Recent_Tweets", blank=True)
-    last_month_tweets = models.ManyToManyField(Tweet, related_name="_Last_Month_Tweets", blank=True)
-    last_fetched_month = models.IntegerField(_('Last month to be fetched'), blank=False, default=0)
+    email: str = models.EmailField(
+        _('Email address'), blank=False, unique=True)
+    twitter_id = models.BigIntegerField(
+        _('Twitter id'), blank=False, unique=True)
+    twitter_name = models.CharField(
+        _('Twitter username'), max_length=1000, blank=False, unique=True)
+    recent_tweets = models.ManyToManyField(
+        Tweet, related_name="_Recent_Tweets", blank=True)
+    last_month_tweets = models.ManyToManyField(
+        Tweet, related_name="_Last_Month_Tweets", blank=True)
+    last_fetched_month = models.IntegerField(
+        _('Last month to be fetched'), blank=False, default=0)
     recent_prediction = models.OneToOneField(Prediction, on_delete=models.CASCADE, blank=True,
                                              related_name="Recent prediction+", null=True)
     last_month_prediction = models.OneToOneField(Prediction, on_delete=models.CASCADE, blank=True,
@@ -254,7 +264,60 @@ class User(AbstractBaseUser, PermissionsMixin):
         except Exception as e:
             raise e
 
-    def get_recent_prediction(self):
+    def _get_recent_tweets_of_user(self):
+        # user = User.objects.filter(email=self.email)[0]
+        recent_tweets = []
+        for tweet in self.recent_tweets:
+            recent_tweets.append(tweet.text)
+        return recent_tweets
+
+    def _get_last_month_tweets_of_user(self):
+        # user = User.objects.filter(email=self.email)[0]
+        last_month_tweets = []
+        for tweet in self.last_month_tweets:
+            last_month_tweets.append(tweet.text)
+        return last_month_tweets
+
+    def _create_prediction(self, prediction):
+        return Prediction.objects.create(prediction=prediction)
+
+    def _save_last_month_prediction(self, prediction):
+        self.last_month_prediction = self._create_prediction(prediction)
+        self.save()
+
+    def _save_recent_prediction(self, prediction):
+        self.recent_prediction = self._create_prediction(prediction)
+        self.save()
+
+    def _update_recent_prediction(self, recent_prediction):
+        recent_prediction_object = self._get_recent_prediction_object()
+        recent_prediction_object.prediction = recent_prediction
+        recent_prediction_object.save()
+
+    def _update_last_month_prediction(self, last_month_prediction):
+        last_month_prediction_object = self._get_last_month_prediction_object()
+        last_month_prediction_object.prediction = last_month_prediction
+        last_month_prediction_object.save()
+
+    def _get_last_month_prediction_number(self):
+        flu_prediction = FluPrediction()
+        last_month_tweets = self._get_last_month_tweets_of_user()
+        prediction = flu_prediction.get_prediction_from_tweets(
+            last_month_tweets)
+        return prediction[1]
+
+    def _get_recent_prediction_number(self):
+        flu_prediction = FluPrediction()
+        recent_tweets = self._get_recent_tweets_of_user()
+        prediction = flu_prediction.get_prediction_from_tweets(recent_tweets)
+        return prediction[1]
+
+    def _get_prediction_number(self, tweets):
+        flu_prediction = FluPrediction()
+        prediction = flu_prediction.get_prediction_from_tweets(tweets)
+        return prediction[1]
+
+    def get_recent_prediction(self, tweets):
         """This method returns the prediction of the recent tweets.
         This assumes that the recent tweets are updated."""
         try:
@@ -263,11 +326,16 @@ class User(AbstractBaseUser, PermissionsMixin):
             return recent_prediction.prediction
         except AttributeError:
             print("Creating Prediction recent")
-            return 1
+            prediction = self._get_prediction_number(tweets)
+            self._save_recent_prediction(prediction)
+            return prediction
         except ValueError:
-            print("Recomputing lm")
+            print("Recomputing recent")
+            prediction = self._get_prediction_number(tweets)
+            self._update_recent_prediction(prediction)
+            return prediction
 
-    def get_last_month_prediction(self):
+    def get_last_month_prediction(self, tweets):
         """This method returns the last month prediction. This will assume
         that the last month tweets are updated."""
         try:
@@ -276,10 +344,14 @@ class User(AbstractBaseUser, PermissionsMixin):
             return last_month_prediction.prediction
         except AttributeError:
             print("Creating prediction lm")
-            return 1
+            prediction = self._get_prediction_number(tweets)
+            self._save_last_month_prediction(prediction)
+            return prediction
         except ValueError:
             print("Recomputing lm")
-            return 1
+            prediction = self._get_prediction_number(tweets)
+            self._update_last_month_prediction(prediction)
+            return prediction
 
 # Signals
 

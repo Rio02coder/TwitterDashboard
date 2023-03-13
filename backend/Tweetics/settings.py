@@ -176,9 +176,12 @@ REST_FRAMEWORK = {
 }
 
 # authentication tokens settings
-ACCESS_TOKEN_EXPIRY_TIME = 36000      # in seconds. # currently expires after 10 hours.
-REFRESH_TOKEN_EXPIRY_TIME = 604800     # in seconds. # currently expires after a week.
-MAX_STORED_REFRESH_TOKENS = 3       # Maximum number of refresh tokens stored per user.
+# in seconds. # currently expires after 10 hours.
+ACCESS_TOKEN_EXPIRY_TIME = 36000
+# in seconds. # currently expires after a week.
+REFRESH_TOKEN_EXPIRY_TIME = 604800
+# Maximum number of refresh tokens stored per user.
+MAX_STORED_REFRESH_TOKENS = 3
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

@@ -1,24 +1,23 @@
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from core.models.user_model import User
-from core.serializers.dynamic_serializers import UserSerializer
-from django.conf import settings
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from core.cache import recent_tweet_cache
-
+from core.utilities.user_data import user_data
 from http import HTTPStatus
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+# CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 # CACHE_STRING = 'RECENT_TWEETS'
+
+
 class RecentTweetsView(APIView):
 
     http_method_names = ['get']
 
-    def get_user_serializer(self, user, fields):
-        return UserSerializer(user, fields=fields)
+    # def get_user_serializer(self, user, fields):
+    #     return UserSerializer(user, fields=fields)
 
-    def get_user(self, email):
-        return User.objects.filter(email=email)[0]
+    # def get_user(self, email):
+    #     return User.objects.filter(email=email)[0]
 
     def store_to_cache(self, data, user_email):
         recent_tweet_cache.set_to_cache(user_email, data, timeout=None)
@@ -31,6 +30,11 @@ class RecentTweetsView(APIView):
         if cache_response:
             return cache_response
 
+    def get_error_response(self, error_string):
+        return {
+            "error": error_string
+        }
+
     def get(self, request, force_update="False"):
         recent_tweets_field = ['recent_tweets']
         user_serializer = None
@@ -38,21 +42,22 @@ class RecentTweetsView(APIView):
         if force_update.lower() == "false":
             data = self.get_data(request.user.email)
             if not data:
-                user_serializer = self.get_user_serializer(request.user, recent_tweets_field)
-                self.store_to_cache(user_serializer.data, user_email=request.user.email)
+                user_serializer = user_data.get_user_serializer(
+                    request.user, recent_tweets_field)
+                self.store_to_cache(user_serializer.data,
+                                    user_email=request.user.email)
             else:
                 cache_data = data
 
         elif force_update.lower() == "true":
-            user = self.get_user(request.user)
+            user = user_data.get_user_by_email(request.user.email)
             User.objects.update_recent_tweets(user)
-            user_serializer = self.get_user_serializer(request.user, recent_tweets_field)
+            user_serializer = user_data.get_user_serializer(
+                request.user, recent_tweets_field)
             self.store_to_cache(user_serializer.data, request.user.email)
 
         else:
-            error = {
-                "error": "Invalid query"
-            }
+            error = self.get_error_response("Invalid query")
             return JsonResponse(error, status=HTTPStatus.BAD_REQUEST)
 
         if not cache_data:

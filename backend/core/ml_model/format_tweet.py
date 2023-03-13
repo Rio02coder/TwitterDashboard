@@ -2,6 +2,7 @@ import numpy as np
 from collections import OrderedDict
 from collections import defaultdict
 from nltk.tokenize import TweetTokenizer
+from cleantext import clean
 import re
 
 
@@ -35,6 +36,55 @@ def token_text(twk, text):
     # twk = twikenizer.Twikenizer()
     res = twk.tokenize(text)
     return res
+
+class TweetCleaner:
+
+    def __init__(self, tweet_list):
+        self.tweet_list = tweet_list
+
+    def _remove_links(self, tweet):
+        '''Takes a string and removes web links from it'''
+        tweet = re.sub(r'https?:\/\/\S+\b|www\.(\w+\.)+\S*',
+                       'url', tweet)  # remove http links
+        # tweet = re.sub(r'bit.ly/\S+', 'url', tweet)  # rempve bitly links
+        # tweet = tweet.strip('[link]')  # remove [links]
+        return tweet
+
+    def _remove_users(self, tweet):
+        '''Takes a string and removes retweet and @user information'''
+        tweet = re.sub('(RT\s@\w+)', 'rt user', tweet)  # remove retweet
+        tweet = re.sub('(@\w+)', 'user', tweet)  # remove tweeted at
+        return tweet
+
+    def _hashtag(self, tweet):
+        tweet = tweet.group()
+        hashtag_body = tweet[1:]
+        result = "<hashtag> {} ".format(hashtag_body.lower())
+        return result
+
+    def _remove_emojis(self, tweet):
+        return clean(tweet, no_emoji=True)
+
+    def _replace_tweet(self, tweet):
+        # should remove &amp;
+        tweet = self._remove_users(tweet)
+        tweet = self._remove_links(tweet)
+        tweet = self._remove_emojis(tweet)
+        tweet = re.sub("#\S+", self._hashtag, tweet)
+        tweet = tweet.lower()
+        tweet = re.sub("[-+]?[.\d]*[\d]+[:,.\d]*",
+                       "number", tweet)  # remove numbers
+        tweet = re.sub("\n", " ", tweet)
+        tweet = tweet.strip()
+        return tweet
+
+    def get_cleaned_tweets(self):
+        cleaned_tweets = []
+        for tweet in self.tweet_list:
+            cleaned_tweet = self._replace_tweet(tweet)
+            cleaned_tweets.append(cleaned_tweet)
+
+        return cleaned_tweets
 
 
 class Tokenizer(object):
