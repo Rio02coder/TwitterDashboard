@@ -1,3 +1,9 @@
 export enum ScreenNames {
-  Home = 'HomeScreen',
+  Login = 'LoginScreen',
+  Signup = 'SignupScreen',
+  FirstName = 'FirstNameScreen',
+  LastName = 'LastNameScreen',
+  Email = 'EmailScreen',
+  TwitterName = 'TwitterNameScreen',
+  Password = 'PasswordScreen',
 }

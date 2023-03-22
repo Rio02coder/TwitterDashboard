@@ -2,6 +2,41 @@ import {ScreenNames} from './ScreenNames';
 
 type NavigationStackTypesStructure = {[key in string]: any};
 
+export type emailForm = {
+  email: string;
+};
+
+export type firsNameForm = {
+  firstName: string;
+} & emailForm;
+
+export type lastNameForm = {
+  lastName: string;
+} & firsNameForm;
+
+export type twitterNameForm = {
+  twitterName: string;
+} & lastNameForm;
+
+export type passwordForm = {
+  password: string;
+  passwordConfirm: string;
+} & twitterNameForm;
+
 export interface NavigationStackTypes extends NavigationStackTypesStructure {
-  [ScreenNames.Home]: undefined;
+  [ScreenNames.Login]: undefined;
+  [ScreenNames.Signup]: undefined;
+  [ScreenNames.Email]: undefined;
+  [ScreenNames.FirstName]: {
+    email: emailForm;
+  };
+  [ScreenNames.LastName]: {
+    firstName: firsNameForm;
+  };
+  [ScreenNames.TwitterName]: {
+    lastName: lastNameForm;
+  };
+  [ScreenNames.Password]: {
+    twitterName: twitterNameForm;
+  };
 }
