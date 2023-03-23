@@ -7,23 +7,50 @@ import Submit from '../../../../components/forms/submit';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {
   NavigationStackTypes,
+  passwordForm,
   twitterNameForm,
 } from '../../../../types/NavigationStackTypes';
 import {ScreenNames} from '../../../../types/ScreenNames';
 import {signupStyles} from '../../styles';
-import {useSignupTwitterNameValidationRules} from '../../../../hooks/useSignupTwitterNameValidationRules';
 import {useSignupPasswordValidationRules} from '../../../../hooks/useSignupPasswordValidationRules';
+import {sender} from '../../../../service/contacter/sender';
+import {URLS} from '../../../../service/urls';
+import {ReduxProps} from '../../../../types/redux/props';
+import {AxiosError} from 'axios';
+import {
+  BackendSignupData,
+  convertToBackendSignupData,
+} from '../../../../types/backend/signup';
 
 type TProps = {
   twitterName: twitterNameForm;
-  navigation: NativeStackNavigationProp<NavigationStackTypes, ScreenNames>;
+  props: ReduxProps;
+  submissionHandler: () => void;
+  responseHandler: () => void;
+  errorHandler: (error: AxiosError) => void;
 };
 
-const PasswordForm = ({navigation, twitterName}: TProps) => {
+const PasswordForm = ({
+  props,
+  twitterName,
+  submissionHandler,
+  responseHandler,
+  errorHandler,
+}: TProps) => {
   const passwordSchema = useSignupPasswordValidationRules();
   return (
     <Formik
-      onSubmit={() => {}}
+      onSubmit={values => {
+        submissionHandler();
+        sender<BackendSignupData, void, void>(
+          URLS.AUTHENTICATION.signup,
+          convertToBackendSignupData({...twitterName, ...values}),
+          props,
+          responseHandler,
+          errorHandler,
+          true,
+        );
+      }}
       validationSchema={passwordSchema}
       initialValues={{
         password: '',

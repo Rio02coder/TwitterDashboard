@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
@@ -23,21 +23,25 @@ class UserAuthTokenView(APIView):
     permission_classes = (AllowAny,)
     http_method_names = ['post']
 
+    def get_error(self, error_string):
+        return {
+            "error": error_string
+        }
+
     def post(self, request) -> HttpResponse:
         request_data: Dict[str, Any] = JSONParser().parse(request)
         serializer = AuthSerializer(data=request_data)
 
         if not serializer.is_valid():
-            return response_generator.generate_error_response(HTTPStatus.BAD_REQUEST,
-                                                              error_message="Request body missing required fields.")
+            return JsonResponse(self.get_error("Email and password are required to login"), status=HTTPStatus.BAD_REQUEST.value)
 
         try:
-            retrieved_user: User = User.objects.get(email=request_data['email'])
+            retrieved_user: User = User.objects.get(
+                email=request_data['email'])
             if not check_password(request_data['password'], retrieved_user.password):
-                print("Password wrong")
                 return response_generator.generate_error_response(HTTPStatus.UNAUTHORIZED,
                                                                   **{'WWW-Authenticate': 'Bearer'})
 
             return token_handler.get_auth_token_response(retrieved_user)
         except ObjectDoesNotExist:
-            return response_generator.generate_error_response(HTTPStatus.NOT_FOUND)
+            return JsonResponse(self.get_error("No such user"), status=HTTPStatus.BAD_REQUEST.value)

@@ -2,15 +2,15 @@ import React from 'react';
 import {View, Image} from 'react-native';
 import {headerStyles} from './styles';
 
-const LoginHeader = () => {
+const ScreenHeader = () => {
   return (
     <View>
       <Image
-        source={require('../../icons/AppLogoWhite.png')}
+        source={require('../../icons/AppLogoBlue.png')}
         style={headerStyles.headerImage}
       />
     </View>
   );
 };
 
-export default React.memo(LoginHeader);
+export default React.memo(ScreenHeader);

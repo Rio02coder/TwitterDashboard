@@ -13,7 +13,9 @@ class UserData:
     def get_user_by_twitter_name(self, twitter_name):
         return User.objects.filter(twitter_name=twitter_name)[0]
 
-    def get_user_serializer(self, user, fields):
+    def get_user_serializer(self, user, fields=[]):
+        if len(fields) == 0:
+            return UserSerializer(user)
         return UserSerializer(user, fields=fields)
 
 

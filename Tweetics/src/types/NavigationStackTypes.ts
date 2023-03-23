@@ -25,7 +25,7 @@ export type passwordForm = {
 
 export interface NavigationStackTypes extends NavigationStackTypesStructure {
   [ScreenNames.Login]: undefined;
-  [ScreenNames.Signup]: undefined;
+  [ScreenNames.Main]: undefined;
   [ScreenNames.Email]: undefined;
   [ScreenNames.FirstName]: {
     email: emailForm;

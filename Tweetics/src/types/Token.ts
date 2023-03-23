@@ -3,3 +3,7 @@ export type Token = {
   refresh: string;
   expires_in: number;
 };
+
+export type AccessTokenRequest = {
+  token: Token['refresh'];
+};
