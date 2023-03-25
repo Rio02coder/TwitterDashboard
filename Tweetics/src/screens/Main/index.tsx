@@ -9,6 +9,13 @@ import {ScreenProps} from '../../types/Screen';
 import {ScreenNames} from '../../types/ScreenNames';
 import appStyle from '../styles/appStyle';
 import {mainScreenStyles} from './styles';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Tweets from '../Tweets';
+import getNavBarIcon from './NavBarIcon';
+import {NavigationStackTypes} from '../../types/NavigationStackTypes';
+import Prediction from '../Prediction';
+import SearchPrediction from '../SearchPrediction';
+import Dashboard from '../Dashboard';
 
 const MainScreen = (props: ScreenProps<ScreenNames.Main>) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -19,16 +26,30 @@ const MainScreen = (props: ScreenProps<ScreenNames.Main>) => {
       setLoading(false);
     }
   }, [props.user]);
-  return (
-    <SafeAreaView style={[appStyle.background, mainScreenStyles.container]}>
-      <TouchableOpacity
-        onPress={() => {
-          retriever(URLS.USER.profile, props, undefined);
-        }}>
-        <ScreenHeader />
-      </TouchableOpacity>
-      {loading ? <ScreenLoading /> : <></>}
-    </SafeAreaView>
+  const Tab = createBottomTabNavigator<NavigationStackTypes>();
+  return loading ? (
+    <ScreenLoading />
+  ) : (
+    <Tab.Navigator
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused}) =>
+          getNavBarIcon(route.name as ScreenNames, focused),
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          height: 80,
+          backgroundColor: 'black',
+          borderTopColor: '#353535',
+        },
+      })}>
+      <Tab.Screen name={ScreenNames.Tweets} component={Tweets} />
+      <Tab.Screen name={ScreenNames.Prediction} component={Prediction} />
+      <Tab.Screen
+        name={ScreenNames.SearchPrediction}
+        component={SearchPrediction}
+      />
+      <Tab.Screen name={ScreenNames.Dashboard} component={Dashboard} />
+    </Tab.Navigator>
   );
 };
 

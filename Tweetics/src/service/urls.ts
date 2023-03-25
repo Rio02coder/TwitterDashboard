@@ -1,5 +1,8 @@
+import Config from 'react-native-config';
+console.log('Config', Config.BASEURL);
+
 export const URLS = {
-  BASE: '10.40.48.202',
+  BASE: Config.BASEURL,
   AUTHENTICATION: {
     signup: 'user/signup/',
     login: 'user/login/',

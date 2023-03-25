@@ -6,4 +6,8 @@ export enum ScreenNames {
   LastName = 'LastNameScreen',
   TwitterName = 'TwitterNameScreen',
   Password = 'PasswordScreen',
+  Tweets = 'TweetsScreen',
+  Prediction = 'PredictionScreen',
+  SearchPrediction = 'SearchPredictionScreen',
+  Dashboard = 'Dashboard',
 }

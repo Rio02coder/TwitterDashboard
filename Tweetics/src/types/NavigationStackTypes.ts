@@ -39,4 +39,8 @@ export interface NavigationStackTypes extends NavigationStackTypesStructure {
   [ScreenNames.Password]: {
     twitterName: twitterNameForm;
   };
+  [ScreenNames.Tweets]: undefined;
+  [ScreenNames.Prediction]: undefined;
+  [ScreenNames.SearchPrediction]: undefined;
+  [ScreenNames.Dashboard]: undefined;
 }

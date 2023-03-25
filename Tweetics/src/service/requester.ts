@@ -174,7 +174,7 @@ class Requester<T = undefined, R = void, F = void> {
       })
       .then((response: AxiosResponse<R>) => this.onSuccess(response.data))
       .catch((err: AxiosError) => {
-        return this.handleError(err);
+        return Promise.reject();
       });
   }
 
