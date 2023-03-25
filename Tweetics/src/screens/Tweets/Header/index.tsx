@@ -1,10 +1,8 @@
 import React, {useContext} from 'react';
 import {Animated, Image, Text, View} from 'react-native';
-import {tweetScreenContext} from '../metadata';
+import {SCROLL_OFFSET, tweetScreenContext} from '../metadata';
 import {headerStyles} from './styles';
 import TweetOptionsComponent from './TweetOptionsComponent';
-
-export const SCROLL_OFFSET = 160;
 
 type TProps = {
   offset: Animated.Value;

@@ -19,6 +19,7 @@ import LoginLoading from '../../components/loading/LoginLoading';
 import {completeLogin} from '../../utilities/ManageSession/login';
 import {AxiosError} from 'axios';
 import {User} from '../../types/User';
+import {BackendLoginResponse} from '../../types/backend/login';
 
 const Login = (props: ScreenProps<ScreenNames.Login>) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,9 +61,10 @@ const Login = (props: ScreenProps<ScreenNames.Login>) => {
           ) : (
             <Form
               props={props}
-              responseHandler={(user: User) => {
+              responseHandler={(response: BackendLoginResponse) => {
+                const user: User = {token: response.token, ...response.user};
                 props.loginUser(user);
-                props.navigation.navigate(ScreenNames.Main);
+                props.navigation.replace(ScreenNames.Main);
               }}
               submissionHandler={() => setLoading(true)}
               errorHandler={(err: AxiosError) => {

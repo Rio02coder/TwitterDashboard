@@ -2,6 +2,8 @@ import {createContext} from 'react';
 import {Animated} from 'react-native';
 import {Tweet} from '../../types/Tweet';
 
+export const SCROLL_OFFSET = 160;
+
 export enum TweetOptions {
   RECENT = 'New Tweets',
   LAST_MONTH = 'Last Month',

@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import {Animated, Text, TouchableOpacity, View} from 'react-native';
-import {SCROLL_OFFSET} from '..';
-import {TweetOptions, tweetScreenContext} from '../../metadata';
+import {SCROLL_OFFSET, TweetOptions, tweetScreenContext} from '../../metadata';
 // import {TweetOptions, tweetScreenContext} from '../../index';
 import {tweetOptionStyles} from './styles';
 

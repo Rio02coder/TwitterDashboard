@@ -6,6 +6,7 @@ from typing import Union
 from core.Twitter_api.Twitter_id import get_twitter_user_id
 from core.Twitter_api.Tweets import get_recent_tweets, get_last_month_tweets
 from core.models.tweet_model import Tweet
+from core.models.application_model import Application
 from core.Twitter_api.Month_date_time import get_current_month_number
 from core.models.prediction_model import Prediction
 from django.db.models.signals import post_delete
@@ -170,6 +171,8 @@ class User(AbstractBaseUser, PermissionsMixin):
                                              related_name="Recent prediction+", null=True)
     last_month_prediction = models.OneToOneField(Prediction, on_delete=models.CASCADE, blank=True,
                                                  related_name="Last month prediction+", null=True)
+    flu_application = models.OneToOneField(
+        Application, on_delete=models.CASCADE, blank=True, null=True, related_name='Flu application+')
     is_verified: bool = models.BooleanField(default=False)
     is_active: bool = models.BooleanField(default=True)
     is_staff: bool = models.BooleanField(default=False)

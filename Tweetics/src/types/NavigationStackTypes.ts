@@ -24,7 +24,7 @@ export type passwordForm = {
 } & twitterNameForm;
 
 export interface NavigationStackTypes extends NavigationStackTypesStructure {
-  [ScreenNames.Login]: undefined;
+  [ScreenNames.Login]: {logout?: boolean};
   [ScreenNames.Main]: undefined;
   [ScreenNames.Email]: undefined;
   [ScreenNames.FirstName]: {

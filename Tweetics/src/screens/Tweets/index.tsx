@@ -5,30 +5,13 @@ import {retriever} from '../../service/contacter/retriever';
 import {URLS} from '../../service/urls';
 import {ScreenProps} from '../../types/Screen';
 import {ScreenNames} from '../../types/ScreenNames';
-import {
-  BackendLastMonthTweets,
-  BackendRecentTweets,
-  Tweet,
-} from '../../types/Tweet';
+import {BackendLastMonthTweets, BackendRecentTweets} from '../../types/Tweet';
 import appStyle from '../styles/appStyle';
 import Header from './Header';
 import {TweetOptions, tweetScreenContext, TweetScreenContext} from './metadata';
 import TweetList from './TweetList';
 
-// export enum TweetOptions {
-//   RECENT = 'New Tweets',
-//   LAST_MONTH = 'Last Month',
-// }
-
-// export type TweetScreenContext = {
-//   selectedOption: TweetOptions;
-//   onSelectOption: (option: TweetOptions) => void;
-//   scrollY: Animated.Value;
-//   tweets: Tweet[];
-// };
-
 const TweetScreen = (props: ScreenProps<ScreenNames.Tweets>) => {
-  const user = props.user;
   const scrollY = useRef(new Animated.Value(0)).current;
   const [selectedOption, updateSelectedOption] = useState<TweetOptions>(
     TweetOptions.RECENT,
@@ -58,8 +41,9 @@ const TweetScreen = (props: ScreenProps<ScreenNames.Tweets>) => {
           retriever<BackendLastMonthTweets, void>(
             URLS.USER.lastMonthTweets,
             props,
-            tweets =>
-              props.updateUser({last_month_tweets: tweets.last_month_tweets}),
+            tweets => {
+              props.updateUser({last_month_tweets: tweets.last_month_tweets});
+            },
           );
     }
   };

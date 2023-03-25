@@ -2,8 +2,9 @@ from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import make_password
 
 from core.models.user_model import User
-from core.serializers.model_serializers import DynamicFieldsModelSerializer, TweetSerializer
+from core.serializers.model_serializers import DynamicFieldsModelSerializer, TweetSerializer, FluApplicationSerializer
 from core.helpers.customs.custom_exceptions import InvalidSerializerMethodError
+
 
 class UserSerializer(DynamicFieldsModelSerializer):
     """
@@ -11,9 +12,10 @@ class UserSerializer(DynamicFieldsModelSerializer):
         Should be used for returning User data and creating new User objects.
         To only return particular fields of the User data, pass the Serializer a fields parameter as a list of field names.
     """
-
+    flu_application = FluApplicationSerializer(read_only=True)
     recent_tweets = TweetSerializer(many=True, read_only=True)
     last_month_tweets = TweetSerializer(many=True, read_only=True)
+
     class Meta:
         model = User
         fields = [
@@ -27,10 +29,11 @@ class UserSerializer(DynamicFieldsModelSerializer):
             'is_staff',
             'password',
             'recent_tweets',
-            'last_month_tweets'
+            'last_month_tweets',
+            'flu_application'
         ]
         read_only_fields = ('id', 'is_verified', 'is_active', 'is_staff', 'date_joined', 'recent_tweets',
-                            'last_month_tweets')
+                            'last_month_tweets', 'flu_application')
         extra_kwargs = {
             'password': {'required': True, 'write_only': True},
         }

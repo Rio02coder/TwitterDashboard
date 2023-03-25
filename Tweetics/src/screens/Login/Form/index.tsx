@@ -7,14 +7,14 @@ import Submit from '../../../components/forms/submit';
 import {useLoginFormValidationRules} from '../../../hooks/useLoginlFormValidationRules';
 import {ReduxProps} from '../../../types/redux/props';
 import {sender} from '../../../service/contacter/sender';
-import {LoginRequest} from '../../../types/backend/login';
+import {BackendLoginResponse, LoginRequest} from '../../../types/backend/login';
 import {User} from '../../../types/User';
 import {URLS} from '../../../service/urls';
 import {AxiosError} from 'axios';
 
 type TProps = {
   props: ReduxProps;
-  responseHandler: (user: User) => void;
+  responseHandler: (user: BackendLoginResponse) => void;
   submissionHandler: () => void;
   errorHandler: (err: AxiosError) => void;
 };
@@ -31,7 +31,7 @@ const Form = ({
     <Formik
       onSubmit={data => {
         submissionHandler();
-        sender<LoginRequest, User, void>(
+        sender<LoginRequest, BackendLoginResponse, void>(
           URLS.AUTHENTICATION.login,
           data,
           props,

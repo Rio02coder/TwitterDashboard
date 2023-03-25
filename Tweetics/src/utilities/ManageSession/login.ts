@@ -15,6 +15,7 @@ export const completeLogin = (
     'GET',
     props,
     (user: User) => {
+      // console.log(userToken);
       user.token = userToken;
       props.loginUser(user);
     },

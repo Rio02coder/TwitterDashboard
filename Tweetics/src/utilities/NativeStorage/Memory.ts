@@ -16,6 +16,10 @@ class Memory<T> {
     return data !== null;
   }
 
+  public deleteData = () => {
+    AsyncStorage.removeItem(this.MEMORY_STRING);
+  };
+
   public getData = () => {
     return AsyncStorage.getItem(this.MEMORY_STRING)
       .then(data =>

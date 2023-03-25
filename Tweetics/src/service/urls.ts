@@ -7,6 +7,7 @@ export const URLS = {
     signup: 'user/signup/',
     login: 'user/login/',
     refreshToken: 'user/token/refresh/',
+    logout: 'user/logout/',
   },
   USER: {
     profile: 'user/profile/',
