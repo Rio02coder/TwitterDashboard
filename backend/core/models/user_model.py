@@ -172,7 +172,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_month_prediction = models.OneToOneField(Prediction, on_delete=models.CASCADE, blank=True,
                                                  related_name="Last month prediction+", null=True)
     flu_application = models.OneToOneField(
-        Application, on_delete=models.CASCADE, blank=True, null=True, related_name='Flu application+')
+        Application, on_delete=models.SET_NULL, blank=True, null=True, related_name='Flu application+')
     is_verified: bool = models.BooleanField(default=False)
     is_active: bool = models.BooleanField(default=True)
     is_staff: bool = models.BooleanField(default=False)
@@ -181,7 +181,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects: UserManager = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['twitter_name']
 
     def get_full_name(self) -> str:
         """Return the full name of the user."""

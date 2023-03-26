@@ -20,21 +20,27 @@ import {completeLogin} from '../../utilities/ManageSession/login';
 import {AxiosError} from 'axios';
 import {User} from '../../types/User';
 import {BackendLoginResponse} from '../../types/backend/login';
+import {manageLogoutSession} from '../../utilities/ManageSession/logout';
 
 const Login = (props: ScreenProps<ScreenNames.Login>) => {
+  const logout = props.route.params ? props.route.params.logout : undefined;
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     setAdjustNothing();
   }, []);
   useEffect(() => {
-    tokenMemory.getToken().then(token => {
-      if (token) {
-        setLoading(true);
-        completeLogin(token, props).catch(() => {
-          setLoading(false);
-        });
-      }
-    });
+    if (!logout) {
+      tokenMemory.getToken().then(token => {
+        if (token) {
+          setLoading(true);
+          completeLogin(token, props).catch(() => {
+            setLoading(false);
+          });
+        }
+      });
+    } else {
+      manageLogoutSession(props);
+    }
   }, []);
   const getErrorMessage = (statusNumber: number) => {
     console.log(statusNumber);

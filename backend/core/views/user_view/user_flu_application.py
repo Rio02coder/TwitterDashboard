@@ -30,6 +30,9 @@ class FluApplicationView(APIView):
 
     def post(self, request):
         request_data = JSONParser().parse(request)
+        user = user_data.get_user_by_email(request.user.email)
+        if user.is_verified == True:
+            return JsonResponse(self.get_error("User already verified", status=HTTPStatus.BAD_REQUEST.value))
         application = request_data['application']
         if not application:
             return JsonResponse(self.get_error("Missing application"), status=HTTPStatus.BAD_REQUEST.value)

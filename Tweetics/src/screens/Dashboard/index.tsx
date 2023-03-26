@@ -15,7 +15,7 @@ const DashBoard = (props: ScreenProps<ScreenNames.Dashboard>) => {
     <SafeAreaView style={[appStyle.background, {flex: 1}]}>
       <UserAvatar />
       <UserData />
-      <UserVerificationButton />
+      <UserVerificationButton user={props.user} navigation={props.navigation} />
       <UserStats />
       <Logout props={props} />
     </SafeAreaView>

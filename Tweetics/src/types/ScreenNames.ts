@@ -10,4 +10,5 @@ export enum ScreenNames {
   Prediction = 'PredictionScreen',
   SearchPrediction = 'SearchPredictionScreen',
   Dashboard = 'Dashboard',
+  ApplicationForm = 'ApplicationForm',
 }

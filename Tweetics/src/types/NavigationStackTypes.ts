@@ -43,4 +43,5 @@ export interface NavigationStackTypes extends NavigationStackTypesStructure {
   [ScreenNames.Prediction]: undefined;
   [ScreenNames.SearchPrediction]: undefined;
   [ScreenNames.Dashboard]: undefined;
+  [ScreenNames.ApplicationForm]: undefined;
 }

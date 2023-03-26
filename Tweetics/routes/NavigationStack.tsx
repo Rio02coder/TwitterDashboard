@@ -10,6 +10,7 @@ import TwitterName from '../src/screens/Signup/TwitterName';
 import Password from '../src/screens/Signup/Password';
 import Main from '../src/screens/Main';
 import Email from '../src/screens/Signup/Email';
+import ApplicationForm from '../src/screens/ApplicationForm';
 
 const Stack = createNativeStackNavigator<NavigationStackTypes>();
 
@@ -30,6 +31,10 @@ export default class Navigator extends React.Component {
           />
           <Stack.Screen name={ScreenNames.Password} component={Password} />
           <Stack.Screen name={ScreenNames.Main} component={Main} />
+          <Stack.Screen
+            name={ScreenNames.ApplicationForm}
+            component={ApplicationForm}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );

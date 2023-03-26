@@ -5,13 +5,14 @@ import {
   StyleProp,
   ViewStyle,
   View,
+  TextStyle,
 } from 'react-native';
 import {useFormikContext} from 'formik';
 import styles from './styles';
 import Errors from '../../errors';
 
 export type TProps<D> = TextInputProps & {
-  contentStyle?: StyleProp<ViewStyle>;
+  contentStyle?: StyleProp<ViewStyle> | StyleProp<TextStyle>;
   field: keyof D;
   isMandatory?: boolean;
   height: ViewStyle['height'];

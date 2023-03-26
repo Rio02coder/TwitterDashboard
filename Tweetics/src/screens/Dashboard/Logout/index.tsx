@@ -23,10 +23,6 @@ const Logout = ({props}: TProps) => {
   const onPress = () => {
     Alert.alert('Logout', 'Do you wish to logout ?', [
       {
-        text: 'Cancel',
-        style: 'cancel',
-      },
-      {
         text: 'Yes',
         onPress: () => {
           networkRequest(props)
@@ -36,6 +32,10 @@ const Logout = ({props}: TProps) => {
             .catch(() => {});
         },
         style: 'destructive',
+      },
+      {
+        text: 'Cancel',
+        style: 'default',
       },
     ]);
   };
