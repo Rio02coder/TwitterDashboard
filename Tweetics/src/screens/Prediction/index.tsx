@@ -13,7 +13,7 @@ const FluPrediction = () => {
       <Text style={fluPredictionScreenStyles.headerText}>Flu Prediction</Text>
       <ScrollView contentContainerStyle={{flex: 1}}>
         <Prediction prediction={0.38} title={'Recent'} />
-        <Prediction prediction={0.64} title={'Last Month'} />
+        <Prediction prediction={0.45} title={'Last Month'} />
       </ScrollView>
     </SafeAreaView>
   );

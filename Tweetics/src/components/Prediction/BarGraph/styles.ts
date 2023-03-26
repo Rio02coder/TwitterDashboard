@@ -8,7 +8,7 @@ export const barGraphStyles = (
     categoryView: {
       width: '30%',
       height: categoryHeight + '%',
-      backgroundColor: 'red',
+      backgroundColor: '#D40D12',
       borderTopStartRadius: 20,
       borderTopEndRadius: 20,
       position: 'absolute',
@@ -18,7 +18,7 @@ export const barGraphStyles = (
     complementaryView: {
       width: '30%',
       height: complementaryHeight + '%',
-      backgroundColor: 'blue',
+      backgroundColor: '#2C3E50',
       borderTopStartRadius: 20,
       borderTopEndRadius: 20,
       position: 'absolute',
