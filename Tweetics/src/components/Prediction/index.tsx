@@ -1,5 +1,6 @@
 import React from 'react';
 import BarGraph from './BarGraph';
+import PieChart from './PieChart';
 
 type TProps = {
   prediction: number;
@@ -14,6 +15,7 @@ const Prediction = ({prediction, title}: TProps) => {
       compelmentaryLabel={'Normal'}
       title={title}
     />
+    // <PieChart />
   );
 };
 

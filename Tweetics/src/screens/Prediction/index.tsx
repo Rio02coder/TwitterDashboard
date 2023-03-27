@@ -73,6 +73,7 @@ const FluPrediction = (props: ScreenProps<ScreenNames.Prediction>) => {
           />
         </ScrollView>
       )}
+      {/* <Prediction prediction={0.38} title={'Recent'} /> */}
     </SafeAreaView>
   );
 };
