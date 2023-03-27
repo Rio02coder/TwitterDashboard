@@ -28,14 +28,14 @@ export const barGraphStyles = (
     titleText: {
       color: 'white',
       marginLeft: '12%',
-      marginTop: '12%',
+      marginTop: '10%',
       fontSize: 22,
       fontWeight: '700',
     },
     container: {
       flexDirection: 'row',
       justifyContent: 'space-around',
-      height: '35%',
+      height: '31%',
       width: '80%',
       alignSelf: 'center',
       borderBottomWidth: 3,

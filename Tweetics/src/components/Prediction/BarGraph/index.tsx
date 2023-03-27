@@ -11,31 +11,39 @@ import {barGraphStyles as StylesWithoutProps} from './styles';
  * The number should be passed between 0 and 1.
  */
 type TProps = {
-  value: number;
+  categoryValue: number;
+  complementaryValue: number;
   categoryLabel: string;
   compelmentaryLabel: string;
   title: string;
 };
 
 const BarGraph = ({
-  value,
+  categoryValue,
+  complementaryValue,
   categoryLabel,
   compelmentaryLabel,
   title,
 }: TProps) => {
-  const complementValue = ((1 - value) * 100).toFixed(0);
-  const categoryValue = (value * 100).toFixed(0);
-  const styles = StylesWithoutProps(categoryValue, complementValue);
+  const complementaryValueString = (complementaryValue * 100).toFixed(0);
+  const categoryValueString = (categoryValue * 100).toFixed(0);
+  const styles = StylesWithoutProps(
+    categoryValueString,
+    complementaryValueString,
+  );
 
   return (
     <>
       <Text style={styles.titleText}>{title}</Text>
       <View style={styles.container}>
         <View style={styles.categoryView}>
-          <Label keyToUse={categoryLabel} value={categoryValue + '%'} />
+          <Label keyToUse={categoryLabel} value={categoryValueString + '%'} />
         </View>
         <View style={styles.complementaryView}>
-          <Label keyToUse={compelmentaryLabel} value={complementValue + '%'} />
+          <Label
+            keyToUse={compelmentaryLabel}
+            value={complementaryValueString + '%'}
+          />
         </View>
       </View>
     </>

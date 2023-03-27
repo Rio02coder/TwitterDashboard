@@ -54,7 +54,8 @@ const FluPrediction = (props: ScreenProps<ScreenNames.Prediction>) => {
         <AnalyticsLoading />
       ) : (
         <ScrollView
-          contentContainerStyle={{flex: 1}}
+          style={{flex: 1}}
+          contentContainerStyle={{paddingBottom: '60%'}}
           refreshControl={
             <RefreshControl
               refreshing={loading}
@@ -63,14 +64,27 @@ const FluPrediction = (props: ScreenProps<ScreenNames.Prediction>) => {
               tintColor={'white'}
             />
           }>
-          <Prediction
-            prediction={props.user.recent_prediction as number}
-            title={'Recent'}
-          />
-          <Prediction
-            prediction={props.user.last_month_prediction as number}
-            title={'Last Month'}
-          />
+          <>
+            <Prediction
+              pieChart={{prediction: props.user.recent_prediction as number}}
+              title={'Recent'}
+            />
+            <Prediction
+              pieChart={{
+                prediction: props.user.last_month_prediction as number,
+              }}
+              title={'Last Month'}
+            />
+            <Prediction
+              barGraph={{
+                categoricalLabel: 'Recent',
+                complementaryLabel: 'Last Month',
+                catergoricalValue: props.user.recent_prediction as number,
+                complementaryValue: props.user.last_month_prediction as number,
+              }}
+              title={'Comparison'}
+            />
+          </>
         </ScrollView>
       )}
       {/* <Prediction prediction={0.38} title={'Recent'} /> */}

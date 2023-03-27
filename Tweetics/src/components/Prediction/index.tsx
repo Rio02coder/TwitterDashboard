@@ -3,19 +3,33 @@ import BarGraph from './BarGraph';
 import PieChart from './PieChart';
 
 type TProps = {
-  prediction: number;
+  pieChart?: {
+    prediction: number;
+  };
   title: string;
+  barGraph?: {
+    complementaryLabel: string;
+    categoricalLabel: string;
+    complementaryValue: number;
+    catergoricalValue: number;
+  };
 };
 
-const Prediction = ({prediction, title}: TProps) => {
-  return (
+const Prediction = ({pieChart, title, barGraph}: TProps) => {
+  let prediction = 0;
+  if (pieChart) {
+    prediction = pieChart.prediction;
+  }
+  return barGraph ? (
     <BarGraph
-      value={prediction}
-      categoryLabel={'Flu'}
-      compelmentaryLabel={'Normal'}
+      categoryLabel={barGraph.categoricalLabel}
+      compelmentaryLabel={barGraph.complementaryLabel}
+      categoryValue={barGraph.catergoricalValue}
+      complementaryValue={barGraph.complementaryValue}
       title={title}
     />
-    // <PieChart />
+  ) : (
+    <PieChart prediction={prediction} title={title} />
   );
 };
 
