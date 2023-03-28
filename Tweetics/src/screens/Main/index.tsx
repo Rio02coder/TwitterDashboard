@@ -39,7 +39,7 @@ const MainScreen = (props: ScreenProps<ScreenNames.Main>) => {
         tabBarStyle: {
           height: Platform.OS === 'ios' ? 80 : 50,
           backgroundColor: '#003049',
-          borderTopColor: '#353535',
+          borderTopColor: '#334756',
         },
       })}>
       <Tab.Screen name={ScreenNames.Tweets} component={Tweets} />
