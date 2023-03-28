@@ -1,5 +1,10 @@
 import React, {useState} from 'react';
-import {Keyboard, SafeAreaView, TouchableWithoutFeedback} from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  SafeAreaView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import connector from '../../redux/connector';
 import appStyle from '../styles/appStyle';
 import SearchBar from './SearchBar';
@@ -8,17 +13,49 @@ import Result from './Result';
 import {ScreenProps} from '../../types/Screen';
 import {ScreenNames} from '../../types/ScreenNames';
 import Unverified from './Unverified';
+import {URLS} from '../../service/urls';
+import {sender} from '../../service/contacter/sender';
+import {
+  BackUserSearchPredictionRequest,
+  BackendUserSearchPrediction,
+} from '../../types/backend/prediction';
+import AnalyticsLoading from '../../components/loading/AnalyticsLoading';
 
 const SearchPrediction = (props: ScreenProps<ScreenNames.SearchPrediction>) => {
   const [data, setData] = useState<string>('');
   const [canClear, setCanClear] = useState<boolean>(false);
   const [prediction, setPrediction] = useState<number | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(false);
+  const networkRequest = (twitter_name: string) => {
+    return sender<
+      BackUserSearchPredictionRequest,
+      BackendUserSearchPrediction,
+      void
+    >(
+      URLS.USER.fluPredictionSearch,
+      {twitter_name},
+      props,
+      res => {
+        setPrediction(res.prediction);
+      },
+      err =>
+        Alert.alert(
+          'Something went wrong with our server. Please try again later.',
+        ),
+    );
+  };
   const onSearch = () => {
-    setCanClear(true);
+    Keyboard.dismiss();
+    setLoading(true);
+    networkRequest(data)
+      .then(() => setCanClear(true))
+      .finally(() => setLoading(false));
   };
 
   const onClear = () => {
+    setData('');
     setCanClear(false);
+    setPrediction(undefined);
   };
 
   if (!props.user.is_verified) {
@@ -39,7 +76,8 @@ const SearchPrediction = (props: ScreenProps<ScreenNames.SearchPrediction>) => {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <SafeAreaView style={[appStyle.background, {flex: 1}]}>
           <SearchBar />
-          <Result />
+
+          {loading ? <AnalyticsLoading /> : <Result />}
         </SafeAreaView>
       </TouchableWithoutFeedback>
     </searchFluContext.Provider>

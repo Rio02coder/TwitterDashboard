@@ -71,7 +71,7 @@ const Login = (props: ScreenProps<ScreenNames.Login>) => {
             <ImageBackground
               source={require('../../icons/AnalyticsLogo.png')}
               style={{flex: 1, height: 490, width: 400, alignSelf: 'center'}}
-              imageStyle={{marginTop: -19}}
+              imageStyle={{marginTop: -5}}
               resizeMode={'cover'}>
               <Form
                 props={props}

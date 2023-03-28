@@ -7,7 +7,7 @@ export const userDataStyles = StyleSheet.create({
     fontSize: 25,
   },
   twitterNameText: {
-    color: '#424242',
+    color: '#939393',
     fontSize: 15,
     alignSelf: 'center',
   },

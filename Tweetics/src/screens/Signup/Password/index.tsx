@@ -7,11 +7,11 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
 } from 'react-native';
-import Header from '../../../components/header';
 import LoginLoading from '../../../components/loading/LoginLoading';
 import connector from '../../../redux/connector';
 import {ScreenProps} from '../../../types/Screen';
 import {ScreenNames} from '../../../types/ScreenNames';
+import BackButton from '../BackButton';
 import SignupText from '../SignupText';
 import StepCount from '../StepCount';
 import {signupStyles} from '../styles';
@@ -27,7 +27,7 @@ const PasswordScreen = (props: ScreenProps<ScreenNames.Password>) => {
         Keyboard.dismiss();
       }}>
       <SafeAreaView style={signupStyles.mainContainer}>
-        <Header />
+        <BackButton navigation={props.navigation} />
         <SignupText />
         <StepCount step={5} />
         {loading ? (

@@ -6,3 +6,7 @@ export type BackendFluPrediction = {
 export type BackendUserSearchPrediction = {
   prediction: number;
 };
+
+export type BackUserSearchPredictionRequest = {
+  twitter_name: string;
+};

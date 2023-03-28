@@ -13,7 +13,7 @@ export const statStyles = StyleSheet.create({
     fontWeight: '700',
   },
   value: {
-    color: '#424242',
+    color: '#939393',
     fontSize: 15,
   },
 });

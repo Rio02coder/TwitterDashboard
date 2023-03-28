@@ -9,6 +9,7 @@ import Header from '../../../components/header';
 import connector from '../../../redux/connector';
 import {ScreenProps} from '../../../types/Screen';
 import {ScreenNames} from '../../../types/ScreenNames';
+import BackButton from '../BackButton';
 import SignupText from '../SignupText';
 import StepCount from '../StepCount';
 import {signupStyles} from '../styles';
@@ -26,7 +27,7 @@ const LastNameScreen = ({
         Keyboard.dismiss();
       }}>
       <SafeAreaView style={signupStyles.mainContainer}>
-        <Header />
+        <BackButton navigation={navigation} />
         <SignupText />
         <StepCount step={3} />
         <ImageBackground

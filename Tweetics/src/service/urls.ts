@@ -15,6 +15,7 @@ export const URLS = {
     lastMonthTweets: 'user/tweets_last_month/',
     fluPrediction: 'user/prediction/',
     fluApplication: 'user/application/',
+    fluPredictionSearch: 'user/flu_search/',
   },
 };
 
