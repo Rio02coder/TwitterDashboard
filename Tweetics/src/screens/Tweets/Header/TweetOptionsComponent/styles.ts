@@ -15,11 +15,11 @@ export const tweetOptionStyles = StyleSheet.create({
     alignSelf: 'center',
   },
   unSelectedText: {
-    color: '#424140',
+    color: '#939393',
   },
   text: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '900',
     alignSelf: 'center',
   },
   view: {

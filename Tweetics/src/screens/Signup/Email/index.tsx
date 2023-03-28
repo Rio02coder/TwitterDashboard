@@ -1,5 +1,10 @@
 import React from 'react';
-import {Keyboard, SafeAreaView, TouchableWithoutFeedback} from 'react-native';
+import {
+  ImageBackground,
+  Keyboard,
+  SafeAreaView,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Header from '../../../components/header';
 import connector from '../../../redux/connector';
 import {ScreenProps} from '../../../types/Screen';
@@ -19,7 +24,13 @@ const EmailScreen = ({navigation}: ScreenProps<ScreenNames.Email>) => {
         <Header />
         <SignupText />
         <StepCount step={1} />
-        <Form navigation={navigation} />
+        <ImageBackground
+          source={require('../../../icons/AnalyticsLogo.png')}
+          style={{flex: 1, height: 490, width: 400, alignSelf: 'center'}}
+          imageStyle={{marginTop: -19}}
+          resizeMode={'cover'}>
+          <Form navigation={navigation} />
+        </ImageBackground>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

@@ -41,13 +41,13 @@ const TwitterNameForm = ({navigation, lastName}: TProps) => {
               isMandatory: true,
               placeholder: 'Twitter Username',
               textAlign: 'center',
-              height: Platform.OS === 'ios' ? '11%' : '14%',
+              height: Platform.OS === 'ios' ? '12%' : '15%',
               width: '70%',
             },
           }}
         />
         <Submit
-          height={Platform.OS === 'ios' ? '10%' : '12%'}
+          height={Platform.OS === 'ios' ? '11%' : '14%'}
           width={'45%'}
           top={'10%'}
         />

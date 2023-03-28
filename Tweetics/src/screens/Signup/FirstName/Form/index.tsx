@@ -39,13 +39,13 @@ const FirstNameForm = ({email, navigation}: TProps) => {
               field: 'firstName',
               isMandatory: true,
               placeholder: 'First Name',
-              height: Platform.OS === 'ios' ? '11%' : '14%',
+              height: Platform.OS === 'ios' ? '11%' : '15%',
               width: '70%',
             },
           }}
         />
         <Submit
-          height={Platform.OS === 'ios' ? '10%' : '12%'}
+          height={Platform.OS === 'ios' ? '10%' : '14%'}
           width={'45%'}
           top={'10%'}
         />

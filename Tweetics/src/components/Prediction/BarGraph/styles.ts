@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 
 export const barGraphStyles = (
   categoryHeight: string,
@@ -8,7 +8,7 @@ export const barGraphStyles = (
     categoryView: {
       width: '30%',
       height: categoryHeight + '%',
-      backgroundColor: '#D40D12',
+      backgroundColor: '#ed1a52',
       borderTopStartRadius: 20,
       borderTopEndRadius: 20,
       position: 'absolute',
@@ -18,7 +18,7 @@ export const barGraphStyles = (
     complementaryView: {
       width: '30%',
       height: complementaryHeight + '%',
-      backgroundColor: '#2C3E50',
+      backgroundColor: '#ffd166',
       borderTopStartRadius: 20,
       borderTopEndRadius: 20,
       position: 'absolute',
@@ -38,7 +38,7 @@ export const barGraphStyles = (
       height: '31%',
       width: '80%',
       alignSelf: 'center',
-      borderBottomWidth: 3,
+      borderBottomWidth: Platform.OS === 'ios' ? 3 : 1,
       borderBottomColor: 'grey',
     },
   });

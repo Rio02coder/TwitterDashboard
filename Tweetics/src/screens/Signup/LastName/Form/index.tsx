@@ -39,13 +39,13 @@ const LastNameForm = ({firstName, navigation}: TProps) => {
               field: 'lastName',
               isMandatory: true,
               placeholder: 'Last Name',
-              height: Platform.OS === 'ios' ? '11%' : '14%',
+              height: Platform.OS === 'ios' ? '11%' : '15%',
               width: '70%',
             },
           }}
         />
         <Submit
-          height={Platform.OS === 'ios' ? '10%' : '12%'}
+          height={Platform.OS === 'ios' ? '10%' : '14%'}
           width={'45%'}
           top={'10%'}
         />

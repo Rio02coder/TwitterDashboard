@@ -5,7 +5,7 @@ import {loginLoadingStyle} from './styles';
 const LoginLoading = () => {
   return (
     <Image
-      source={require('../../../icons/LoginLoading.gif')}
+      source={require('../../../icons/ScreenLoading.gif')}
       style={loginLoadingStyle.image}
     />
   );

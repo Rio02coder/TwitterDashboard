@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, TouchableOpacity} from 'react-native';
+import {Platform, SafeAreaView, TouchableOpacity} from 'react-native';
 import ScreenLoading from '../../components/loading/ScreenLoading';
 import ScreenHeader from '../../components/ScreenHeader';
 import connector from '../../redux/connector';
@@ -37,8 +37,8 @@ const MainScreen = (props: ScreenProps<ScreenNames.Main>) => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
-          height: 80,
-          backgroundColor: 'black',
+          height: Platform.OS === 'ios' ? 80 : 50,
+          backgroundColor: '#003049',
           borderTopColor: '#353535',
         },
       })}>

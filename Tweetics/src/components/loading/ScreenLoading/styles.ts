@@ -5,6 +5,6 @@ export const screenLoadingStyle = StyleSheet.create({
     height: 300,
     width: 300,
     alignSelf: 'center',
-    marginTop: '50%',
+    marginTop: '25%',
   },
 });

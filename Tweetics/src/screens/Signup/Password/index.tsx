@@ -2,6 +2,7 @@ import {AxiosError} from 'axios';
 import React, {useState} from 'react';
 import {
   Alert,
+  ImageBackground,
   Keyboard,
   SafeAreaView,
   TouchableWithoutFeedback,
@@ -32,16 +33,28 @@ const PasswordScreen = (props: ScreenProps<ScreenNames.Password>) => {
         {loading ? (
           <LoginLoading />
         ) : (
-          <Form
-            props={props}
-            twitterName={twitterName}
-            responseHandler={() => props.navigation.navigate(ScreenNames.Login)}
-            errorHandler={(error: AxiosError) => {
-              setLoading(false);
-              Alert.alert('Error', error.message);
-            }}
-            submissionHandler={() => setLoading(true)}
-          />
+          <>
+            <ImageBackground
+              source={require('../../../icons/AnalyticsLogo.png')}
+              style={{flex: 1, height: 490, width: 400, alignSelf: 'center'}}
+              imageStyle={{marginTop: -19}}
+              resizeMode={'cover'}>
+              <Form
+                props={props}
+                twitterName={twitterName}
+                responseHandler={() =>
+                  props.navigation.navigate(ScreenNames.Login, {
+                    logout: undefined,
+                  })
+                }
+                errorHandler={(error: AxiosError) => {
+                  setLoading(false);
+                  Alert.alert('Error', error.message);
+                }}
+                submissionHandler={() => setLoading(true)}
+              />
+            </ImageBackground>
+          </>
         )}
       </SafeAreaView>
     </TouchableWithoutFeedback>

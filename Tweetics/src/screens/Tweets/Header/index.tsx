@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Animated, Image, Text, View} from 'react-native';
+import {Animated, Image, Platform, Text, View} from 'react-native';
 import {SCROLL_OFFSET, tweetScreenContext} from '../metadata';
 import {headerStyles} from './styles';
 import TweetOptionsComponent from './TweetOptionsComponent';
@@ -10,6 +10,8 @@ type TProps = {
 
 const Header = () => {
   const {scrollY} = useContext(tweetScreenContext);
+
+  const IMAGE_Y_OFFSET = Platform.OS === 'ios' ? -30 : -40;
 
   const HEADER_HEIGHT = scrollY.interpolate({
     inputRange: [0, SCROLL_OFFSET],

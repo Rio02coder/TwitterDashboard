@@ -11,7 +11,7 @@ export const userNameStyles = StyleSheet.create({
     marginRight: '2%',
   },
   twitterNameText: {
-    color: '#3a3a3a',
+    color: '#939393',
     fontSize: 15,
   },
 });

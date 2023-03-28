@@ -1,6 +1,9 @@
 package com.tweetics;
 
-import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+import com.facebook.react.shell.MainReactPackage;
+import java.util.Arrays;
+// import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+import com.lugg.RNCConfig.RNCConfigPackage;
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
@@ -26,11 +29,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       @SuppressWarnings("UnnecessaryLocalVariable")
       List<ReactPackage> packages = new PackageList(this).getPackages();
-      // Packages that cannot be autolinked yet can be added manually here, for
-      // example:
-      // packages.add(new MyReactNativePackage());
-      new ReactNativeConfigPackage();
+      // // Packages that cannot be autolinked yet can be added manually here, for
+      // // example:
+      // // packages.add(new MyReactNativePackage());
+      // packages.add(new RNCConfigPackage());
       return packages;
+      // return Arrays.asList(
+      // new MainReactPackage(),
+      // new RNCConfigPackage());
     }
 
     @Override

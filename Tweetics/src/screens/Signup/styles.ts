@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 export const signupStyles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#5ba8ff',
+    backgroundColor: '#003049',
   },
   signupTextView: {
     marginTop: '8%',

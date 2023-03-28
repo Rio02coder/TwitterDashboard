@@ -53,7 +53,7 @@ const Form = ({
               field: 'email',
               isMandatory: true,
               placeholder: 'Email',
-              height: Platform.OS === 'ios' ? '11%' : '14%',
+              height: Platform.OS === 'ios' ? '14%' : '17%',
               width: '70%',
             },
           }}
@@ -67,13 +67,13 @@ const Form = ({
               isMandatory: true,
               placeholder: 'Password',
               secureTextEntry: true,
-              height: Platform.OS === 'ios' ? '11%' : '14%',
+              height: Platform.OS === 'ios' ? '14%' : '17%',
               width: '70%',
             },
           }}
         />
         <Submit
-          height={Platform.OS === 'ios' ? '10%' : '12%'}
+          height={Platform.OS === 'ios' ? '12%' : '17%'}
           width={'45%'}
           top={'20%'}
         />

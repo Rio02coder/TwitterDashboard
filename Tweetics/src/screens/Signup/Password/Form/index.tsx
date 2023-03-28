@@ -80,13 +80,13 @@ const PasswordForm = ({
               secureTextEntry: true,
               isMandatory: true,
               placeholder: 'Password Confirmation',
-              height: Platform.OS === 'ios' ? '11%' : '14%',
+              height: Platform.OS === 'ios' ? '11%' : '15%',
               width: '70%',
             },
           }}
         />
         <Submit
-          height={Platform.OS === 'ios' ? '10%' : '12%'}
+          height={Platform.OS === 'ios' ? '10%' : '14%'}
           width={'45%'}
           top={'10%'}
         />

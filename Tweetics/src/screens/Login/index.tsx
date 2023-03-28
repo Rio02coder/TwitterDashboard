@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {
   Alert,
+  ImageBackground,
+  Image,
   Keyboard,
   SafeAreaView,
   TouchableWithoutFeedback,
@@ -21,6 +23,7 @@ import {AxiosError} from 'axios';
 import {User} from '../../types/User';
 import {BackendLoginResponse} from '../../types/backend/login';
 import {manageLogoutSession} from '../../utilities/ManageSession/logout';
+import ScreenLoading from '../../components/loading/ScreenLoading';
 
 const Login = (props: ScreenProps<ScreenNames.Login>) => {
   const logout = props.route.params ? props.route.params.logout : undefined;
@@ -63,25 +66,32 @@ const Login = (props: ScreenProps<ScreenNames.Login>) => {
           <Header />
           <JoinText />
           {loading ? (
-            <LoginLoading />
+            <ScreenLoading />
           ) : (
-            <Form
-              props={props}
-              responseHandler={(response: BackendLoginResponse) => {
-                const user: User = {token: response.token, ...response.user};
-                props.loginUser(user);
-                props.navigation.replace(ScreenNames.Main);
-              }}
-              submissionHandler={() => setLoading(true)}
-              errorHandler={(err: AxiosError) => {
-                setLoading(false);
-                Alert.alert(
-                  'Error',
-                  getErrorMessage(err.response?.status as number),
-                );
-              }}
-            />
+            <ImageBackground
+              source={require('../../icons/AnalyticsLogo.png')}
+              style={{flex: 1, height: 490, width: 400, alignSelf: 'center'}}
+              imageStyle={{marginTop: -19}}
+              resizeMode={'cover'}>
+              <Form
+                props={props}
+                responseHandler={(response: BackendLoginResponse) => {
+                  const user: User = {token: response.token, ...response.user};
+                  props.loginUser(user);
+                  props.navigation.replace(ScreenNames.Main);
+                }}
+                submissionHandler={() => setLoading(true)}
+                errorHandler={(err: AxiosError) => {
+                  setLoading(false);
+                  Alert.alert(
+                    'Error',
+                    getErrorMessage(err.response?.status as number),
+                  );
+                }}
+              />
+            </ImageBackground>
           )}
+
           <Footer navigation={props.navigation} />
         </>
       </SafeAreaView>
