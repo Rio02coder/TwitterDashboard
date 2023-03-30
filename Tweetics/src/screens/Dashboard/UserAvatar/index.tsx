@@ -6,7 +6,7 @@ const UserAvatar = () => {
   return (
     <View style={userAvatarStyles.container}>
       <Image
-        source={require('../../../icons/TweetScreenIconFocused.png')}
+        source={require('../../../icons/TweetUserIcon.png')}
         style={userAvatarStyles.image}
       />
     </View>
