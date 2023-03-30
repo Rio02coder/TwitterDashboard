@@ -25,7 +25,7 @@ export const unverifiedStyles = StyleSheet.create({
     width: '70%',
     height: '6%',
     alignSelf: 'center',
-    marginTop: '18%',
+    // marginTop: '18%',
   },
   buttonText: {
     fontWeight: 'bold',

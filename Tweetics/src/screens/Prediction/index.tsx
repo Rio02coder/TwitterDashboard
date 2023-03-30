@@ -80,14 +80,13 @@ const FluPrediction = (props: ScreenProps<ScreenNames.Prediction>) => {
                 categoricalLabel: 'Recent',
                 complementaryLabel: 'Last Month',
                 catergoricalValue: props.user.recent_prediction as number,
-                complementaryValue: 0.3 as number,
+                complementaryValue: props.user.last_month_prediction as number,
               }}
               title={'Comparison'}
             />
           </>
         </ScrollView>
       )}
-      {/* <Prediction prediction={0.38} title={'Recent'} /> */}
     </SafeAreaView>
   );
 };

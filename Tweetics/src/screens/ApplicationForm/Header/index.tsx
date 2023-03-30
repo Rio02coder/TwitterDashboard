@@ -30,7 +30,9 @@ const getSubText = (isFormSubmitted: boolean) => {
 const Header = ({isFormSubmitted, navigation}: TProps) => {
   return (
     <View style={headerStyles.container}>
-      <TouchableOpacity onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        style={headerStyles.iconContainer}
+        onPress={() => navigation.goBack()}>
         <Image
           source={require('../../../icons/BackArrow.png')}
           style={headerStyles.backIcon}

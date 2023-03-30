@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Formik} from 'formik';
 import {
   Alert,
@@ -60,7 +60,7 @@ const Form = ({
               field: 'application',
               isMandatory: true,
               placeholder: 'Your application',
-              height: Platform.OS === 'ios' ? '66%' : '68%',
+              height: '60%',
               width: '93%',
               editable: flu_application === null,
               multiline: true,

@@ -71,7 +71,8 @@ const TweetScreen = (props: ScreenProps<ScreenNames.Tweets>) => {
         scrollY,
         tweets: getTweets(),
       }}>
-      <SafeAreaView style={[appStyle.background, {flex: 1}]}>
+      <SafeAreaView
+        style={[appStyle.background, {flex: 1, paddingHorizontal: '2%'}]}>
         <Header />
         <TweetList
           noDataContent={getNoDataContent()}

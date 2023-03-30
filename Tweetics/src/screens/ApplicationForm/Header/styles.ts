@@ -20,4 +20,7 @@ export const headerStyles = StyleSheet.create({
     height: 35,
     width: 35,
   },
+  iconContainer: {
+    alignSelf: 'flex-start',
+  },
 });

@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 export const formStyles = StyleSheet.create({
   input: {
-    backgroundColor: 'black',
+    backgroundColor: '#003049',
     borderWidth: 1,
     borderColor: '#424242',
     alignSelf: 'center',

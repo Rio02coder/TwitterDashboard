@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, Platform, StyleSheet} from 'react-native';
 
 export const searchBarStyles = StyleSheet.create({
   bar: {
@@ -8,7 +8,7 @@ export const searchBarStyles = StyleSheet.create({
     backgroundColor: '#969b97',
     alignSelf: 'center',
     marginTop: '5%',
-    paddingHorizontal: '4%',
+    paddingHorizontal: Platform.OS === 'ios' ? '4%' : '2%',
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
