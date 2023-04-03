@@ -5,19 +5,10 @@ from core.cache import recent_tweet_cache
 from core.utilities.user_data import user_data
 from http import HTTPStatus
 
-# CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
-# CACHE_STRING = 'RECENT_TWEETS'
-
 
 class RecentTweetsView(APIView):
 
     http_method_names = ['get']
-
-    # def get_user_serializer(self, user, fields):
-    #     return UserSerializer(user, fields=fields)
-
-    # def get_user(self, email):
-    #     return User.objects.filter(email=email)[0]
 
     def store_to_cache(self, data, user_email):
         recent_tweet_cache.set_to_cache(user_email, data, timeout=None)

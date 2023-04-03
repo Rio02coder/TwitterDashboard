@@ -51,17 +51,18 @@ class UserFluSearchView(APIView):
         user_flu_search_cache.set_to_cache(twitter_name, data, timeout=10000)
 
     def post(self, request):
-        # user = self.get_user(request.user)
         try:
             self.is_user_verified(request.user)
         except:
-            return JsonResponse(self.get_error_string("User is unverified", status=HTTPStatus.BAD_REQUEST.value))
+            return JsonResponse(self.get_error_string("User is unverified"), status=HTTPStatus.BAD_REQUEST.value)
         request_data = JSONParser().parse(request)
 
-        twitter_name = request_data['twitter_name']
+        if not 'twitter_name' in request_data:
+            return JsonResponse(self.get_error_string('Missing twitter name'), status=HTTPStatus.BAD_REQUEST.value)
 
+        twitter_name = request_data['twitter_name']
         if not twitter_name:
-            return JsonResponse(self.get_twitter_name_error(), HTTPStatus.BAD_REQUEST.value)
+            return JsonResponse(self.get_error_string('Missing twitter name'), status=HTTPStatus.BAD_REQUEST.value)
         # Check cache
         cache_data = self.get_cache_data(twitter_name)
 
