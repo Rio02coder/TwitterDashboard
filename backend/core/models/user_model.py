@@ -17,15 +17,10 @@ from core.flu_prediction.prediction import FluPrediction
 
 
 class UserManager(BaseUserManager):
-    """
-        User Manager Model
-    """
 
     use_in_migrations = True
 
     def _create_user(self, email: str, password: str, twitter_name: str, **extra_fields):
-        """Create and save a User with the given email, password and Twitter username."""
-
         if not email:
             raise ValueError('The user must provide an email!')
         email = self.normalize_email(email)
@@ -68,7 +63,6 @@ class UserManager(BaseUserManager):
             raise e
 
     def create_user(self, email: str, password: Union[str, None], twitter_name: str, **extra_fields):
-        """Create and save a regular user with the email, password and twitter name"""
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         user = self._create_user(email, password, twitter_name, **extra_fields)
@@ -77,7 +71,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email: str, password: str, twitter_name: str, **extra_fields):
-        """Create and save a SuperUser with the given email, password and twitter name."""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -123,16 +116,11 @@ class UserManager(BaseUserManager):
 
     def create(self, email: str, password: Union[str, None], twitter_name: str, **extra_fields):
         user = self.create_user(email, password, twitter_name, **extra_fields)
-        # Get recent tweets and add it to the user
-        # self.add_recent_tweets(user)
-        # self.add_last_month_tweets(user)
         return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """
-        Model used to store information about the user.
-    """
+
     first_name: str = models.CharField(
         _('First name'),
         max_length=1000,
@@ -183,8 +171,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['twitter_name']
 
-    def get_full_name(self) -> str:
-        """Return the full name of the user."""
+    def get_full_name(self):
         return f'{self.first_name} {self.last_name}'
 
     def _get_last_month_prediction_object(self):
@@ -295,11 +282,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def _update_recent_prediction(self, recent_prediction):
         recent_prediction_object = self._get_recent_prediction_object()
         recent_prediction_object.prediction = recent_prediction
+        recent_prediction_object.requires_re_computation = False
         recent_prediction_object.save()
 
     def _update_last_month_prediction(self, last_month_prediction):
         last_month_prediction_object = self._get_last_month_prediction_object()
         last_month_prediction_object.prediction = last_month_prediction
+        last_month_prediction_object.requires_re_computation = False
         last_month_prediction_object.save()
 
     def _get_last_month_prediction_number(self):

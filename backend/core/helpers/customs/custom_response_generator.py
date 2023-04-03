@@ -4,13 +4,7 @@ from http import HTTPStatus
 
 
 class ResponseGenerator:
-    """
-        Generate json responses with a message and a description.
-    """
-
-    # NOTE: Kwargs can be used to add headers to the JsonResponse.
-    def generate_error_response(self, http_status: HTTPStatus, error_message=None, **kwargs) -> JsonResponse:
-        """Generates JsonResponse for an error from a given HTTPStatus."""
+    def generate_error_response(self, http_status: HTTPStatus, error_message=None, **kwargs):
         error_response = {
             "error": {
                 "message": http_status.phrase,
@@ -24,7 +18,7 @@ class ResponseGenerator:
 
         return json_response
 
+# Exposing a singleton
 
-'''______________________________________________________________________________________'''
 
 response_generator = ResponseGenerator()

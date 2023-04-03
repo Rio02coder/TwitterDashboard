@@ -1,0 +1,32 @@
+[
+  {
+    "model": "core.user",
+    "pk": 1,
+    "fields": {
+      "first_name": "Rio",
+      "last_name": "Chakraborty",
+      "email": "shmeelok02@gmail.com",
+      "password": "pbkdf2_sha256$320000$ugfyQzdOZqasPOv8vY9lj5$3B7ylrLTeZq5QGaOVp8KdcfClnUITRbjHlCMZTJVy/k=",
+      "twitter_name": "NikiasMolina",
+      "twitter_id": 124355454,
+      "is_verified": false,
+      "is_active": true,
+      "is_superuser": false
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 2,
+    "fields": {
+      "first_name": "Rio2",
+      "last_name": "Chakraborty2",
+      "email": "shmeelok03@gmail.com",
+      "password": "pbkdf2_sha256$320000$ugfyQzdOZqasPOv8vY9lj5$3B7ylrLTeZq5QGaOVp8KdcfClnUITRbjHlCMZTJVy/k=",
+      "twitter_name": "Cristiano",
+      "twitter_id": 123242355435,
+      "is_verified": false,
+      "is_active": true,
+      "is_superuser": false
+    }
+  }
+]
