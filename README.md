@@ -53,6 +53,9 @@ To setup the cache server of the backend, we need to go outside the project dire
   python3 manage.py migrate
 ```
 
+## Backend Model Setup
+To use the ML models, we need to download the models from https://emckclac-my.sharepoint.com/:f:/g/personal/k20040611_kcl_ac_uk/EgPrVYaqI5lGmMDdy7beyC0B6KpFHCiYdfYRsIoCpLZCBQ?e=D2eCRS . Here we would find a folder which contains 4 models. Once they are downloaded, we need to copy and paste them in **TwitterDashboard/backend/core/ml_model**
+
 ## Running Backend Server
 Before running the following instructions, we need to start the cache server
 by:
