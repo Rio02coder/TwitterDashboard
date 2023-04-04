@@ -46,6 +46,9 @@ const SearchPrediction = (props: ScreenProps<ScreenNames.SearchPrediction>) => {
   };
   const onSearch = () => {
     Keyboard.dismiss();
+    if (data === '') {
+      return;
+    }
     setLoading(true);
     networkRequest(data)
       .then(() => setCanClear(true))
