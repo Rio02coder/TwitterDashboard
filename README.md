@@ -79,7 +79,7 @@ we need to go to **TwitterDashboard/backend/Tweetics/settings.py** and add the i
 Once this is done, we have to execute the following command
 
 ```bash
-  python3 manage.py runserver <ip-address>:<port>
+  python3 manage.py runserver <ip-address>:8000
 ```
 
 
@@ -97,7 +97,7 @@ Once this is done, we need to run the following command
 ## Frontend Environment Variables
 To run this project, you will need to add the following environment variables to your .env file. This .env file should reside in the root directory of the frontend which is TwitterDashboard/Tweetics
 
-`BASEURL = "10.40.197.79"`
+`BASEURL = "<The IP you want or Set to 127.0.0.1>"`
 ## Frontend Installation
 To run the front end a setup of react native is required. To start with the installtion, we need to make sure we have tools like **npm**, **yarn**, **npx** installed.
  
